@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 
 export const loader = async () => {
   return json({
@@ -17,11 +17,23 @@ export const loader = async () => {
 };
 
 export default function Posts() {
+  // 通过useLoaderData这个hook渲染静态数据，拿到静态数据
   const { posts } = useLoaderData<typeof loader>();
   console.log(posts);
   return (
     <main>
-      <h1>Posts</h1>
+      <ul>
+        {posts.map((post) => (
+          <li key={post.slug}>
+            <Link
+              to={post.slug}
+              className="text-blue-600 underline"
+            >
+              {post.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </main>
   );
 }
